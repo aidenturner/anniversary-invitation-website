@@ -27,7 +27,7 @@ export default function Home() {
           {/* Content Below Image */}
           <div className="text-center space-y-6">
             <div className="space-y-2">
-              <p className="text-lg text-accent font-medium tracking-wide">A & B</p>
+              <p className="text-lg text-accent font-medium tracking-wide">Ian & Bay</p>
               <h1 className="text-5xl md:text-6xl font-serif font-bold text-primary">
                 10 Years
               </h1>

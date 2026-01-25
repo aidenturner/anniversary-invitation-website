@@ -62,7 +62,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
 
     // Validate required fields
     if (!formData.name.trim() || (!formData.email.trim() && !formData.phone.trim())) {
-      alert('Vui lòng điền đầy đủ thông tin bắt buộc');
+      alert('Please fill in all required fields');
       return;
     }
 
@@ -109,8 +109,8 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
       // Scroll to top to see success message
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
-      console.error('Lỗi khi gửi biểu mẫu:', error);
-      alert('Có lỗi xảy ra. Vui lòng thử lại.');
+      console.error('Error submitting form:', error);
+      alert('An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
