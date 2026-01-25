@@ -1,11 +1,7 @@
 import React from "react"
 import type { Metadata } from 'next'
-import { Playfair_Display, Lora } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
-
-const playfair = Playfair_Display({ subsets: ["latin"] });
-const lora = Lora({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: '10th Anniversary - Ian & Bay',

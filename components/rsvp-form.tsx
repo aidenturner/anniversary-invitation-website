@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Checkbox } from '@/components/ui/checkbox';
 
 interface FormData {
   name: string;
@@ -47,15 +46,6 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
     }));
   };
 
-  const handleDietaryChange = (option: string, checked: boolean) => {
-    setFormData((prev) => {
-      if (checked) {
-        return { ...prev, dietary: [...prev.dietary, option] };
-      } else {
-        return { ...prev, dietary: prev.dietary.filter((item) => item !== option) };
-      }
-    });
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,7 +60,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
 
     try {
       // Submit to Google Sheets via Apps Script
-      const response = await fetch(
+      await fetch(
         'https://script.google.com/macros/d/AKfycbyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/usercopy',
         {
           method: 'POST',
@@ -96,7 +86,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
         email: '',
         phone: '',
         attending: 'yes',
-        dietary: '',
+        dietary: [],
         accommodation: '',
         flightDetails: '',
         message: '',
@@ -138,10 +128,10 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
         </div>
         <h3 className="text-2xl font-serif text-primary mb-3">Thank you!</h3>
         <p className="text-foreground mb-2">
-          We're so glad to have your confirmation.
+          We&apos;re so glad to have your confirmation.
         </p>
         <p className="text-muted-foreground mb-6">
-          We'll be in touch soon with more details.
+          We&apos;ll be in touch soon with more details.
         </p>
         <        Button
           onClick={() => setSubmitted(false)}
@@ -160,7 +150,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
         {/* Name */}
         <div className="space-y-3">
           <Label htmlFor="name" className="text-base font-medium text-foreground">
-            What's your name? <span className="text-destructive">*</span>
+            What&apos;s your name? <span className="text-destructive">*</span>
           </Label>
           <Input
             id="name"
@@ -225,13 +215,13 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
             <div className="flex items-center space-x-3">
               <RadioGroupItem value="yes" id="attend-yes" />
               <Label htmlFor="attend-yes" className="font-normal cursor-pointer">
-                Yes, I'll be there
+                Yes, I&apos;ll be there
               </Label>
             </div>
             <div className="flex items-center space-x-3">
               <RadioGroupItem value="no" id="attend-no" />
               <Label htmlFor="attend-no" className="font-normal cursor-pointer">
-                No, I won't be able to make it
+                No, I won&apos;t be able to make it
               </Label>
             </div>
           </RadioGroup>

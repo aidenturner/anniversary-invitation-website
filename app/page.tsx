@@ -45,7 +45,7 @@ export default function Home() {
             </div>
 
             <p className="text-foreground leading-relaxed pt-2">
-              We'd love for you to celebrate with us. This gathering means a lot to us—you've been an important part of our journey, and we want to share this milestone with you.
+              We&apos;d love for you to celebrate with us. This gathering means a lot to us—you&apos;ve been an important part of our journey, and we want to share this milestone with you.
             </p>
           </div>
         </div>
@@ -58,14 +58,14 @@ export default function Home() {
             {/* Privacy Notice - Integrated */}
             <div className="mb-8 pb-6 border-b border-secondary/30">
               <p className="text-sm text-center text-foreground">
-                This is a personal invitation for you. Please keep this link private and don't share it with others.
+                This is a personal invitation for you. Please keep this link private and don&apos;t share it with others.
               </p>
             </div>
 
             {/* Form Intro */}
             <div className="mb-8 pb-8 border-b border-secondary/30 space-y-2">
               <p className="text-foreground leading-relaxed">
-                We'd love to know if you can join us on <span className="font-semibold">November 21, 2025</span>. Hotel, meals, and airport transport are all covered. Please confirm by <span className="font-semibold">March 31</span>.
+                We&apos;d love to know if you can join us on <span className="font-semibold">November 21, 2025</span>. Hotel, meals, and airport transport are all covered. Please confirm by <span className="font-semibold">March 31</span>.
               </p>
             </div>
 
@@ -78,7 +78,7 @@ export default function Home() {
       <section className="py-16 px-4 text-center">
         <div className="max-w-2xl mx-auto space-y-4">
           <p className="text-lg text-foreground">
-            We can't wait to celebrate with you.
+            We can&apos;t wait to celebrate with you.
           </p>
         </div>
       </section>
