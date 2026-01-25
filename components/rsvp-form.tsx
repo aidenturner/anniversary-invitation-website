@@ -1,8 +1,7 @@
 'use client';
 
 import React from "react"
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -37,6 +36,23 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<{ name?: string; contact?: string }>({});
+  const formContainerRef = useRef<HTMLDivElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const contactSectionRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to form container when thank you message appears
+  useEffect(() => {
+    if (submitted && formContainerRef.current) {
+      // Use setTimeout to ensure the DOM has updated
+      setTimeout(() => {
+        formContainerRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }, 100);
+    }
+  }, [submitted]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -44,50 +60,67 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
       ...prev,
       [name]: value,
     }));
+    // Clear errors when user types
+    if (name === 'name' && errors.name) {
+      setErrors((prev) => ({ ...prev, name: undefined }));
+    }
+    if ((name === 'email' || name === 'phone') && errors.contact) {
+      setErrors((prev) => ({ ...prev, contact: undefined }));
+    }
   };
 
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const submitForm = () => {
+    const newErrors: { name?: string; contact?: string } = {};
 
     // Validate required fields
-    if (!formData.name.trim() || (!formData.email.trim() && !formData.phone.trim())) {
-      alert('Please fill in all required fields');
+    if (!formData.name.trim()) {
+      newErrors.name = 'Please enter your name';
+    }
+    if (!formData.email.trim() && !formData.phone.trim()) {
+      newErrors.contact = 'Please provide at least one contact method';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      // Scroll to first error
+      if (newErrors.name && nameInputRef.current) {
+        nameInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        nameInputRef.current.focus();
+      } else if (newErrors.contact && contactSectionRef.current) {
+        contactSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       return;
     }
 
-    // Wrap async logic in a promise that's always handled
-    (async () => {
-      setLoading(true);
+    setLoading(true);
 
-      try {
-        // Submit to SheetDB
-        const response = await fetch('https://sheetdb.io/api/v1/res0vf94ldsnu', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            data: {
-              timestamp: new Date().toISOString(),
-              name: formData.name,
-              email: formData.email,
-              phone: formData.phone,
-              attending: formData.attending,
-              dietary: formData.dietary,
-              accommodation: formData.accommodation,
-              flightDetails: formData.flightDetails,
-              message: formData.message,
-            },
-          }),
-        });
-
+    // Submit to SheetDB
+    fetch('https://sheetdb.io/api/v1/res0vf94ldsnu', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: {
+          timestamp: new Date().toISOString(),
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          attending: formData.attending,
+          dietary: formData.dietary,
+          accommodation: formData.accommodation,
+          flightDetails: formData.flightDetails,
+          message: formData.message,
+        },
+      }),
+    })
+      .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to submit form');
         }
-
         setSubmitted(true);
+        setErrors({});
         setFormData({
           name: '',
           email: '',
@@ -98,41 +131,22 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
           flightDetails: '',
           message: '',
         });
-
         if (onSubmitSuccess) {
-          try {
-            onSubmitSuccess();
-          } catch (callbackError) {
-            console.error('Error in onSubmitSuccess callback:', callbackError);
-          }
+          onSubmitSuccess();
         }
-
-        // Scroll to top to see success message
-        try {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } catch {
-          // Fallback if smooth scroll fails
-          window.scrollTo(0, 0);
-        }
-      } catch (error) {
-        // Ensure we're handling Error objects properly
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        console.error('Error submitting form:', errorMessage, error);
+      })
+      .catch((error) => {
+        console.error('Error submitting form:', error);
         alert('An error occurred. Please try again.');
-      } finally {
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    })().catch((error) => {
-      // Catch any unhandled rejections from the async IIFE
-      console.error('Unhandled error in form submission:', error);
-      setLoading(false);
-      alert('An error occurred. Please try again.');
-    });
+      });
   };
 
   if (submitted) {
     return (
-      <div className="max-w-2xl mx-auto text-center py-12 px-6">
+      <div ref={formContainerRef} className="max-w-2xl mx-auto text-center py-12 px-6">
         <div className="mb-6">
           <div className="inline-block">
             <svg
@@ -150,45 +164,41 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
             </svg>
           </div>
         </div>
-        <h3 className="text-2xl font-serif text-primary mb-3">Thank you!</h3>
-        <p className="text-foreground mb-2">
-          We&apos;re so glad to have your confirmation.
+        <p className="text-foreground mb-3 text-lg">
+          Thank you for letting us know.
         </p>
-        <p className="text-muted-foreground mb-6">
-          We&apos;ll be in touch soon with more details.
+        <p className="text-muted-foreground">
+          We&apos;re grateful to have you as part of this journey and can&apos;t wait to celebrate together.
         </p>
-        <Button
-          onClick={() => setSubmitted(false)}
-          variant="outline"
-          className="text-primary border-primary hover:bg-primary/5"
-        >
-          Back
-        </Button>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
+    <div ref={formContainerRef}>
+      <div className="max-w-2xl mx-auto">
       <div className="space-y-6">
         {/* Name */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <Label htmlFor="name" className="text-base font-medium text-foreground">
             Your name <span className="text-destructive">*</span>
           </Label>
           <Input
+            ref={nameInputRef}
             id="name"
             name="name"
             type="text"
             value={formData.name}
             onChange={handleInputChange}
-            className="h-12 border-muted focus:border-primary"
-            required
+            className={`h-12 border-muted focus:border-primary ${errors.name ? 'border-destructive' : ''}`}
           />
+          {errors.name && (
+            <p className="text-sm text-destructive">{errors.name}</p>
+          )}
         </div>
 
         {/* Contact Information */}
-        <div className="space-y-3">
+        <div ref={contactSectionRef} className="space-y-2">
           <Label className="text-base font-medium text-foreground">
             Contact info <span className="text-destructive">*</span>
           </Label>
@@ -207,7 +217,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
                 placeholder="+84 ..."
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="h-11 border-muted focus:border-primary"
+                className={`h-11 border-muted focus:border-primary ${errors.contact ? 'border-destructive' : ''}`}
               />
             </div>
             <div className="space-y-2">
@@ -221,10 +231,13 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
                 placeholder="your@email.com"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="h-11 border-muted focus:border-primary"
+                className={`h-11 border-muted focus:border-primary ${errors.contact ? 'border-destructive' : ''}`}
               />
             </div>
           </div>
+          {errors.contact && (
+            <p className="text-sm text-destructive">{errors.contact}</p>
+          )}
         </div>
 
         {/* Attendance */}
@@ -258,7 +271,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
           <Textarea
             id="dietary"
             name="dietary"
-            placeholder="E.g., vegetarian, no seafood, allergies, etc."
+            placeholder="Vegetarian, allergies, or food preferences"
             value={formData.dietary}
             onChange={handleInputChange}
             className="min-h-20 border-muted focus:border-primary"
@@ -273,7 +286,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
           <Textarea
             id="accommodation"
             name="accommodation"
-            placeholder="Let us know if you'd like a specific room type, have mobility needs, or any other preferences..."
+            placeholder="Room type requests, accessibility needs, or notes"
             value={formData.accommodation}
             onChange={handleInputChange}
             className="min-h-20 border-muted focus:border-primary"
@@ -288,7 +301,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
           <Textarea
             id="flightDetails"
             name="flightDetails"
-            placeholder="Arrival/departure dates and flight numbers if you'd like us to arrange airport transport..."
+            placeholder="So we can arrange airport pickup"
             value={formData.flightDetails}
             onChange={handleInputChange}
             className="min-h-20 border-muted focus:border-primary"
@@ -303,7 +316,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
           <Textarea
             id="message"
             name="message"
-            placeholder="Share any wishes or a personal note..."
+            placeholder="Anything you’d like to share with us?"
             value={formData.message}
             onChange={handleInputChange}
             className="min-h-24 border-muted focus:border-primary"
@@ -312,15 +325,17 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
 
         {/* Submit Button */}
         <div className="pt-4">
-          <Button
-            type="submit"
+          <button
+            type="button"
             disabled={loading}
-            className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
+            onClick={submitForm}
+            className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-md disabled:opacity-50"
           >
             {loading ? 'Sending...' : 'Send my response'}
-          </Button>
+          </button>
         </div>
       </div>
-    </form>
+      </div>
+    </div>
   );
 }
