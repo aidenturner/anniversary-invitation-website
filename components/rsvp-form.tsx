@@ -13,7 +13,7 @@ interface FormData {
   email: string;
   phone: string;
   attending: string;
-  dietary: string[];
+  dietary: string;
   accommodation: string;
   flightDetails: string;
   message: string;
@@ -29,7 +29,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
     email: '',
     phone: '',
     attending: 'yes',
-    dietary: [],
+    dietary: '',
     accommodation: '',
     flightDetails: '',
     message: '',
@@ -47,8 +47,9 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
   };
 
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
 
     // Validate required fields
     if (!formData.name.trim() || (!formData.email.trim() && !formData.phone.trim())) {
@@ -56,54 +57,77 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
       return;
     }
 
-    setLoading(true);
+    // Wrap async logic in a promise that's always handled
+    (async () => {
+      setLoading(true);
 
-    try {
-      // Submit to Google Sheets via Apps Script
-      await fetch(
-        'https://script.google.com/macros/d/AKfycbyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/usercopy',
-        {
+      try {
+        // Submit to SheetDB
+        const response = await fetch('https://sheetdb.io/api/v1/res0vf94ldsnu', {
           method: 'POST',
-          mode: 'no-cors',
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
           },
-          body: new URLSearchParams({
-            timestamp: new Date().toISOString(),
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            attending: formData.attending,
-            dietary: formData.dietary.join(', '),
-            message: formData.message,
-          }).toString(),
+          body: JSON.stringify({
+            data: {
+              timestamp: new Date().toISOString(),
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              attending: formData.attending,
+              dietary: formData.dietary,
+              accommodation: formData.accommodation,
+              flightDetails: formData.flightDetails,
+              message: formData.message,
+            },
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to submit form');
         }
-      );
 
-      setSubmitted(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        attending: 'yes',
-        dietary: [],
-        accommodation: '',
-        flightDetails: '',
-        message: '',
-      });
+        setSubmitted(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          attending: 'yes',
+          dietary: '',
+          accommodation: '',
+          flightDetails: '',
+          message: '',
+        });
 
-      if (onSubmitSuccess) {
-        onSubmitSuccess();
+        if (onSubmitSuccess) {
+          try {
+            onSubmitSuccess();
+          } catch (callbackError) {
+            console.error('Error in onSubmitSuccess callback:', callbackError);
+          }
+        }
+
+        // Scroll to top to see success message
+        try {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch {
+          // Fallback if smooth scroll fails
+          window.scrollTo(0, 0);
+        }
+      } catch (error) {
+        // Ensure we're handling Error objects properly
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error('Error submitting form:', errorMessage, error);
+        alert('An error occurred. Please try again.');
+      } finally {
+        setLoading(false);
       }
-
-      // Scroll to top to see success message
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('An error occurred. Please try again.');
-    } finally {
+    })().catch((error) => {
+      // Catch any unhandled rejections from the async IIFE
+      console.error('Unhandled error in form submission:', error);
       setLoading(false);
-    }
+      alert('An error occurred. Please try again.');
+    });
   };
 
   if (submitted) {
@@ -133,7 +157,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
         <p className="text-muted-foreground mb-6">
           We&apos;ll be in touch soon with more details.
         </p>
-        <        Button
+        <Button
           onClick={() => setSubmitted(false)}
           variant="outline"
           className="text-primary border-primary hover:bg-primary/5"
@@ -150,13 +174,12 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
         {/* Name */}
         <div className="space-y-3">
           <Label htmlFor="name" className="text-base font-medium text-foreground">
-            What&apos;s your name? <span className="text-destructive">*</span>
+            Your name <span className="text-destructive">*</span>
           </Label>
           <Input
             id="name"
             name="name"
             type="text"
-            placeholder="Let us know how to call you"
             value={formData.name}
             onChange={handleInputChange}
             className="h-12 border-muted focus:border-primary"
@@ -294,7 +317,7 @@ export function RSVPForm({ onSubmitSuccess }: RSVPFormProps) {
             disabled={loading}
             className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
           >
-            {loading ? 'Submitting...' : 'Confirm'}
+            {loading ? 'Sending...' : 'Send my response'}
           </Button>
         </div>
       </div>

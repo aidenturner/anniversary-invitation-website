@@ -4,79 +4,81 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #faf7f2;
+  /* Theme: blue #4A90E2 + blush pink #E8B4B8 */
+  --background: #fefbfb;
   --foreground: #3a3a3a;
   --card: #ffffff;
   --card-foreground: #3a3a3a;
   --popover: #ffffff;
   --popover-foreground: #3a3a3a;
-  --primary: #8b6f47;
+  --primary: #398fb7;
   --primary-foreground: #ffffff;
-  --secondary: #d4c4b0;
+  --secondary: #E8B4B8;
   --secondary-foreground: #3a3a3a;
-  --muted: #e8ddd0;
+  --muted: #f5e8ea;
   --muted-foreground: #7a7a7a;
-  --accent: #c9a875;
+  --accent: #6BA3E8;
   --accent-foreground: #ffffff;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: #ece7e1;
+  --border: #f0d4d8;
   --input: #ffffff;
-  --ring: #8b6f47;
-  --chart-1: #8b6f47;
-  --chart-2: #c9a875;
-  --chart-3: #d4c4b0;
-  --chart-4: #e8ddd0;
-  --chart-5: #faf7f2;
+  --ring: #2563EB;
+  --chart-1: #2563EB;
+  --chart-2: #6BA3E8;
+  --chart-3: #E8B4B8;
+  --chart-4: #f5e8ea;
+  --chart-5: #fefbfb;
   --radius: 0.625rem;
-  --sidebar: #faf7f2;
+  --sidebar: #fefbfb;
   --sidebar-foreground: #3a3a3a;
-  --sidebar-primary: #8b6f47;
+  --sidebar-primary: #2563EB;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #c9a875;
+  --sidebar-accent: #6BA3E8;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #ece7e1;
-  --sidebar-ring: #8b6f47;
+  --sidebar-border: #f0d4d8;
+  --sidebar-ring: #2563EB;
 }
 
 .dark {
-  --background: #2a2622;
+  --background: #1a1a2e;
   --foreground: #f5f0eb;
-  --card: #3a3530;
+  --card: #252540;
   --card-foreground: #f5f0eb;
-  --popover: #3a3530;
+  --popover: #252540;
   --popover-foreground: #f5f0eb;
-  --primary: #c9a875;
-  --primary-foreground: #2a2622;
-  --secondary: #5a4a35;
-  --secondary-foreground: #f5f0eb;
-  --muted: #5a4a35;
+  --primary: #6BA3E8;
+  --primary-foreground: #1a1a2e;
+  --secondary: #d49ba0;
+  --secondary-foreground: #1a1a2e;
+  --muted: #3a3a55;
   --muted-foreground: #b0a097;
-  --accent: #d4b896;
-  --accent-foreground: #2a2622;
+  --accent: #8BB5F0;
+  --accent-foreground: #1a1a2e;
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: #4a403a;
-  --input: #3a3530;
-  --ring: #c9a875;
-  --chart-1: #c9a875;
-  --chart-2: #d4b896;
-  --chart-3: #5a4a35;
-  --chart-4: #4a403a;
-  --chart-5: #2a2622;
-  --sidebar: #2a2622;
+  --border: #3a3a55;
+  --input: #252540;
+  --ring: #6BA3E8;
+  --chart-1: #6BA3E8;
+  --chart-2: #8BB5F0;
+  --chart-3: #d49ba0;
+  --chart-4: #3a3a55;
+  --chart-5: #1a1a2e;
+  --sidebar: #1a1a2e;
   --sidebar-foreground: #f5f0eb;
-  --sidebar-primary: #c9a875;
-  --sidebar-primary-foreground: #2a2622;
-  --sidebar-accent: #d4b896;
-  --sidebar-accent-foreground: #2a2622;
-  --sidebar-border: #4a403a;
-  --sidebar-ring: #c9a875;
+  --sidebar-primary: #6BA3E8;
+  --sidebar-primary-foreground: #1a1a2e;
+  --sidebar-accent: #8BB5F0;
+  --sidebar-accent-foreground: #1a1a2e;
+  --sidebar-border: #3a3a55;
+  --sidebar-ring: #6BA3E8;
 }
 
 @theme inline {
-  --font-sans: 'Lora', 'Lora Fallback';
-  --font-mono: 'Playfair Display', 'Playfair Display Fallback';
+  --font-sans: var(--font-sans-next), 'Lora', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif-next), 'Playfair Display', Georgia, serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Monaco, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -121,5 +123,37 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Gentle pulse animation for loading state */
+  @keyframes gentlePulse {
+    0%, 100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.6;
+    }
+  }
+  
+  .image-skeleton {
+    background: var(--color-secondary);
+    opacity: 0.15;
+    animation: gentlePulse 3s ease-in-out infinite;
+  }
+  
+  /* Smooth fade-in animation for loaded images */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .image-loaded {
+    animation: fadeIn 0.6s ease-out;
   }
 }
