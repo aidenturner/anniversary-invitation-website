@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen relative overflow-hidden">
-      {/* ... prev content ... */}
+      {/* Confetti background - using theme colors */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {/* Confetti dots - blue (primary) and pink (secondary) */}
         {/* Top area */}
@@ -63,10 +63,10 @@ export default function Home() {
         <div className="absolute top-[93%] left-[88%] w-2 h-2 bg-secondary/35 rounded-full" />
       </div>
       {/* Hero – Event title & Couple names */}
-      <section className="relative z-10 pt-12 pb-0 px-0 md:pt-16 md:pb-2 overflow-hidden">
-        <div className="w-full space-y-4">
+      <section className="relative z-10 pt-12 pb-4 px-4 md:pt-16 md:pb-6">
+        <div className="max-w-3xl mx-auto space-y-8">
           {/* Event Title */}
-          <div className="text-center space-y-2 px-4">
+          <div className="text-center space-y-2">
             <p className="text-base text-muted-foreground tracking-wide">
               You&apos;re invited to
             </p>
@@ -78,52 +78,50 @@ export default function Home() {
             </p>
           </div>
 
-          <DecorativeDivider variant="dots" className="py-4" />
-
-          <div className="max-w-2xl mx-auto text-center px-4">
-            <p className="text-foreground leading-relaxed">
-              10 years. 3,652 days. Infinite memories. It&apos;s been a wild, wonderful ride.
-            </p>
-          </div>
-          {/* Photo Gallery Hero */}
-          <div className="w-full max-w-7xl mx-auto py-2">
-            {galleryImages.length > 0 ? (
-              <PhotoGallery
-                images={galleryImages}
-                withHeader={false}
-                variant="default"
-                className="py-0"
-              />
-            ) : (
-              // Fallback static image if no gallery images found
-              <div className="flex justify-center px-4">
-                <div className="relative w-full max-w-2xl mx-auto">
-                  <div className="relative w-full aspect-square rounded-[1rem] p-[4px] bg-gradient-to-br from-primary via-secondary to-primary">
-                    <div className="relative w-full h-full rounded-[1rem] overflow-hidden bg-card">
-                      <div className="absolute inset-0 image-skeleton rounded-[1rem] z-0" aria-hidden />
-                      <Image
-                        src="/anniversary-hero.jpg"
-                        alt="Ian & Bay"
-                        fill
-                        className="object-cover object-[center_30%] image-loaded relative z-10"
-                        sizes="(max-width: 768px) 100vw, 672px"
-                        priority
-                        loading="eager"
-                      />
-                    </div>
-                  </div>
+          {/* Photo */}
+          <div className="flex justify-center px-4">
+            <div className="relative w-full max-w-2xl mx-auto">
+              {/* Gradient border */}
+              <div className="relative w-full aspect-square rounded-[1rem] p-[4px] bg-gradient-to-br from-primary via-secondary to-primary">
+                <div className="relative w-full h-full rounded-[1rem] overflow-hidden">
+                  {/* Loading skeleton */}
+                  <div className="absolute inset-0 image-skeleton rounded-[1rem] z-0" aria-hidden />
+                  <Image
+                    src="/anniversary-hero.jpg"
+                    alt="Ian & Bay"
+                    fill
+                    className="object-cover object-[center_30%] image-loaded relative z-10"
+                    sizes="(max-width: 768px) 100vw, 672px"
+                    priority
+                    loading="eager"
+                  />
                 </div>
               </div>
-            )}
+            </div>
+          </div>
+
+          {/* Date & Location */}
+          <div className="text-center space-y-2">
+            <p className="text-3xl md:text-4xl font-serif font-bold text-primary">
+              November 21, 2026
+            </p>
+            <p className="flex items-center justify-center gap-1.5 text-lg md:text-xl font-serif text-muted-foreground font-medium">
+              <Waves className="size-4 shrink-0 text-primary" aria-hidden />
+              Nha Trang, Vietnam
+              <Waves className="size-4 shrink-0 text-primary" aria-hidden />
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Message Section - Removed top divider to flow better */}
+      <DecorativeDivider variant="dots" className="py-2" />
+
+      {/* Message Section */}
       <section className="relative z-10 py-4 px-4">
         <div className="max-w-2xl mx-auto text-center space-y-4">
           <p className="text-foreground leading-relaxed">
-            We&apos;d love for you to celebrate with us. This gathering means a lot—you&apos;ve been an important part of our journey, and we want to share this milestone with you.
+            We&apos;d love for you to celebrate with us. This gathering means a lot—you&apos;ve
+            been an important part of our journey, and we want to share this milestone with you.
           </p>
           <p className="text-sm text-muted-foreground italic">
             Shared with you personally — thank you for keeping it private.
@@ -131,7 +129,7 @@ export default function Home() {
         </div>
       </section>
 
-      <DecorativeDivider variant="dots" className="py-4" />
+      <DecorativeDivider variant="dots" className="py-2" />
 
       {/* RSVP Section */}
       <section className="relative z-10 py-6 px-4 md:py-8" aria-labelledby="rsvp-heading">
@@ -155,6 +153,9 @@ export default function Home() {
 
       <DecorativeDivider variant="wave" className="py-4" />
 
+      {/* Photo Gallery */}
+      <PhotoGallery images={galleryImages} />
+
       <DecorativeDivider variant="dots" className="py-2" />
 
       {/* Closing */}
@@ -166,6 +167,6 @@ export default function Home() {
           </p>
         </div>
       </section>
-    </main >
+    </main>
   )
 }
