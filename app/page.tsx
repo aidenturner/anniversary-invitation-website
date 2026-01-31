@@ -78,6 +78,8 @@ export default function Home() {
             </p>
           </div>
 
+
+
           <DecorativeDivider variant="dots" className="py-4" />
 
           <div className="max-w-2xl mx-auto text-center px-4">
@@ -117,17 +119,7 @@ export default function Home() {
             )}
           </div>
 
-          {/* Date & Location */}
-          <div className="text-center space-y-2 pb-8">
-            <p className="text-3xl md:text-4xl font-serif font-bold text-primary">
-              November 21, 2026
-            </p>
-            <p className="flex items-center justify-center gap-1.5 text-lg md:text-xl font-serif text-muted-foreground font-medium">
-              <Waves className="size-4 shrink-0 text-primary" aria-hidden />
-              Nha Trang, Vietnam
-              <Waves className="size-4 shrink-0 text-primary" aria-hidden />
-            </p>
-          </div>
+
         </div>
       </section>
 
@@ -140,10 +132,24 @@ export default function Home() {
           <p className="text-sm text-muted-foreground italic">
             Shared with you personally — thank you for keeping it private.
           </p>
+
+          <DecorativeDivider variant="dots" className="py-4" />
+
+          {/* Date & Location */}
+          <div className="text-center space-y-2">
+            <p className="text-3xl md:text-4xl font-serif font-bold text-primary">
+              November 21, 2026
+            </p>
+            <p className="flex items-center justify-center gap-1.5 text-lg md:text-xl font-serif text-muted-foreground font-medium">
+              <Waves className="size-4 shrink-0 text-primary" aria-hidden />
+              Nha Trang, Vietnam
+              <Waves className="size-4 shrink-0 text-primary" aria-hidden />
+            </p>
+          </div>
         </div>
       </section>
 
-      <DecorativeDivider variant="dots" className="py-4" />
+      <DecorativeDivider variant="wave" className="py-6" />
 
       {/* RSVP Section */}
       <section className="relative z-10 py-6 px-4 md:py-8" aria-labelledby="rsvp-heading">
@@ -155,7 +161,6 @@ export default function Home() {
                 Confirm your attendance
               </p>
               <p className="text-foreground leading-relaxed text-center text-base">
-                The celebration will take place in Nha Trang.<br />
                 We will take care of 1 night hotel (standard room) and airport transportation (from Cam Ranh airport to-from the hotel). Details will follow closer to the date.
                 <span className="block mt-4 font-medium">
                   Kindly let us know by <span className="text-primary font-semibold">March 31, 2026</span>.
