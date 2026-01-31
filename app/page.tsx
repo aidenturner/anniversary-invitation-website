@@ -116,6 +116,8 @@ export default function Home() {
               </div>
             )}
           </div>
+
+
         </div>
       </section>
 
@@ -127,6 +129,22 @@ export default function Home() {
           </p>
           <p className="text-sm text-muted-foreground italic">
             Shared with you personally — thank you for keeping it private.
+          </p>
+        </div>
+      </section>
+
+      <DecorativeDivider variant="dots" className="py-4" />
+
+      {/* Date & Location */}
+      <section className="relative z-10 py-4 px-4">
+        <div className="text-center space-y-2">
+          <p className="text-3xl md:text-4xl font-serif font-bold text-primary">
+            November 21, 2026
+          </p>
+          <p className="flex items-center justify-center gap-1.5 text-lg md:text-xl font-serif text-muted-foreground font-medium">
+            <Waves className="size-4 shrink-0 text-primary" aria-hidden />
+            Nha Trang, Vietnam
+            <Waves className="size-4 shrink-0 text-primary" aria-hidden />
           </p>
         </div>
       </section>
