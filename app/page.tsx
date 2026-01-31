@@ -117,7 +117,17 @@ export default function Home() {
             )}
           </div>
 
-
+          {/* Date & Location */}
+          <div className="text-center space-y-2 pb-8">
+            <p className="text-3xl md:text-4xl font-serif font-bold text-primary">
+              November 21, 2026
+            </p>
+            <p className="flex items-center justify-center gap-1.5 text-lg md:text-xl font-serif text-muted-foreground font-medium">
+              <Waves className="size-4 shrink-0 text-primary" aria-hidden />
+              Nha Trang, Vietnam
+              <Waves className="size-4 shrink-0 text-primary" aria-hidden />
+            </p>
+          </div>
         </div>
       </section>
 
@@ -135,22 +145,6 @@ export default function Home() {
 
       <DecorativeDivider variant="dots" className="py-4" />
 
-      {/* Date & Location */}
-      <section className="relative z-10 py-4 px-4">
-        <div className="text-center space-y-2">
-          <p className="text-3xl md:text-4xl font-serif font-bold text-primary">
-            November 21, 2026
-          </p>
-          <p className="flex items-center justify-center gap-1.5 text-lg md:text-xl font-serif text-muted-foreground font-medium">
-            <Waves className="size-4 shrink-0 text-primary" aria-hidden />
-            Nha Trang, Vietnam
-            <Waves className="size-4 shrink-0 text-primary" aria-hidden />
-          </p>
-        </div>
-      </section>
-
-      <DecorativeDivider variant="dots" className="py-4" />
-
       {/* RSVP Section */}
       <section className="relative z-10 py-6 px-4 md:py-8" aria-labelledby="rsvp-heading">
         <div className="max-w-3xl mx-auto">
@@ -160,9 +154,12 @@ export default function Home() {
               <p className="text-xl font-serif text-primary text-center font-medium">
                 Confirm your attendance
               </p>
-              <p className="text-foreground leading-relaxed text-center">
-                We&apos;ll take care of hotel, meals, and airport transportation.<br />
-                Kindly let us know by <span className="font-semibold text-primary">March 31, 2026</span>.
+              <p className="text-foreground leading-relaxed text-center text-base">
+                The celebration will take place in Nha Trang.<br />
+                We will take care of 1 night hotel (standard room) and airport transportation (from Cam Ranh airport to-from the hotel). Details will follow closer to the date.
+                <span className="block mt-4 font-medium">
+                  Kindly let us know by <span className="text-primary font-semibold">March 31, 2026</span>.
+                </span>
               </p>
             </div>
 
