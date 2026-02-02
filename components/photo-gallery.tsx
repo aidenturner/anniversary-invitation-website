@@ -10,12 +10,16 @@ export function PhotoGallery({
   className,
   images = [],
   withHeader = true,
-  variant = 'default'
+  variant = 'default',
+  title = "Our Journey",
+  subtitle = "Top moments from the last 10 years"
 }: {
   className?: string;
   images?: string[];
   withHeader?: boolean;
   variant?: 'default' | 'hero';
+  title?: string;
+  subtitle?: string;
 }) {
   const [emblaRef] = useEmblaCarousel({
     loop: true,
@@ -31,8 +35,8 @@ export function PhotoGallery({
     <div className={cn('w-full', withHeader ? 'py-8 space-y-4' : '', className)}>
       {withHeader && (
         <div className="text-center space-y-2 mb-6">
-          <h2 className="text-3xl font-serif text-primary">Our Journey</h2>
-          <p className="text-muted-foreground">Top moments from the last 10 years</p>
+          <h2 className="text-3xl font-serif text-primary">{title}</h2>
+          <p className="text-muted-foreground">{subtitle}</p>
         </div>
       )}
 

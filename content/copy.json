@@ -1,0 +1,30 @@
+{
+    "hero": {
+        "intro": "You're invited to",
+        "title": "Ian & Bay's",
+        "subtitle": "10th Anniversary Celebration",
+        "story": "You’re receiving this invitation because you’ve been an essential part of our journey. 10 years. 3,652 days. Infinite memories — a wild and wonderful ride. As we mark this milestone, we’d love to celebrate love, adventure, and to thank you — the ones who made our journey richer and unforgettable."
+    },
+    "gallery": {
+        "title": "Our Journey",
+        "subtitle": "Top moments from the last 10 years"
+    },
+    "message": {
+        "content": "",
+        "private_note": "Shared with you personally — thank you for keeping it private."
+    },
+    "event_details": {
+        "date": "November 21, 2026",
+        "location": "Nha Trang, Vietnam"
+    },
+    "rsvp": {
+        "title": "Confirm your attendance",
+        "description": "Program details will be shared with you in August/September this year. To truly enjoy this time together, we hope you’ll stay the night and celebrate with us. We will cover 1 night hotel (21st Nov 2026) – standard room and airport transportation (Cam Ranh airport to & from the hotel).",
+        "deadline_text": "Kindly let us know by",
+        "deadline_date": "March 31, 2026"
+    },
+    "closing": {
+        "message": "We can't wait to celebrate with you.",
+        "signoff": "Ian & Bay"
+    }
+}

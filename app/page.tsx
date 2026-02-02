@@ -6,6 +6,8 @@ import { PhotoGallery } from '@/components/photo-gallery';
 import fs from 'fs';
 import path from 'path';
 
+import copy from '@/content/copy.json';
+
 export default function Home() {
   // Get images from public/gallery
   const galleryDir = path.join(process.cwd(), 'public', 'gallery');
@@ -68,13 +70,13 @@ export default function Home() {
           {/* Event Title */}
           <div className="text-center space-y-2 px-4">
             <p className="text-base text-muted-foreground tracking-wide">
-              You&apos;re invited to
+              {copy.hero.intro}
             </p>
             <h1 className="text-6xl md:text-7xl font-serif font-bold text-primary tracking-tight">
-              Ian & Bay&apos;s
+              {copy.hero.title}
             </h1>
             <p className="text-xl md:text-2xl font-serif text-foreground">
-              10th Anniversary Celebration
+              {copy.hero.subtitle}
             </p>
           </div>
 
@@ -84,7 +86,7 @@ export default function Home() {
 
           <div className="max-w-2xl mx-auto text-center px-4">
             <p className="text-foreground leading-relaxed">
-              10 years. 3,652 days. Infinite memories. It&apos;s been a wild, wonderful ride.
+              {copy.hero.story}
             </p>
           </div>
           {/* Photo Gallery Hero */}
@@ -95,6 +97,8 @@ export default function Home() {
                 withHeader={false}
                 variant="default"
                 className="py-0"
+                title={copy.gallery.title}
+                subtitle={copy.gallery.subtitle}
               />
             ) : (
               // Fallback static image if no gallery images found
@@ -126,11 +130,13 @@ export default function Home() {
       {/* Message Section - Removed top divider to flow better */}
       <section className="relative z-10 py-4 px-4">
         <div className="max-w-2xl mx-auto text-center space-y-4">
-          <p className="text-foreground leading-relaxed">
-            We&apos;d love for you to celebrate with us. This gathering means a lot—you&apos;ve been an important part of our journey, and we want to share this milestone with you.
-          </p>
+          {copy.message.content && (
+            <p className="text-foreground leading-relaxed">
+              {copy.message.content}
+            </p>
+          )}
           <p className="text-sm text-muted-foreground italic">
-            Shared with you personally — thank you for keeping it private.
+            {copy.message.private_note}
           </p>
 
           <DecorativeDivider variant="dots" className="py-4" />
@@ -138,11 +144,11 @@ export default function Home() {
           {/* Date & Location */}
           <div className="text-center space-y-2">
             <p className="text-3xl md:text-4xl font-serif font-bold text-primary">
-              November 21, 2026
+              {copy.event_details.date}
             </p>
             <p className="flex items-center justify-center gap-1.5 text-lg md:text-xl font-serif text-muted-foreground font-medium">
               <Waves className="size-4 shrink-0 text-primary" aria-hidden />
-              Nha Trang, Vietnam
+              {copy.event_details.location}
               <Waves className="size-4 shrink-0 text-primary" aria-hidden />
             </p>
           </div>
@@ -158,12 +164,12 @@ export default function Home() {
           <div className="bg-card rounded-lg p-5 md:p-6 border border-border shadow-sm">
             <div className="mb-8 pb-6 border-b border-border space-y-4">
               <p className="text-xl font-serif text-primary text-center font-medium">
-                Confirm your attendance
+                {copy.rsvp.title}
               </p>
               <p className="text-foreground leading-relaxed text-center text-base">
-                We will take care of 1 night hotel (standard room) and airport transportation (from Cam Ranh airport to-from the hotel). Details will follow closer to the date.
+                {copy.rsvp.description}
                 <span className="block mt-4 font-medium">
-                  Kindly let us know by <span className="text-primary font-semibold">March 31, 2026</span>.
+                  {copy.rsvp.deadline_text} <span className="text-primary font-semibold">{copy.rsvp.deadline_date}</span>.
                 </span>
               </p>
             </div>
@@ -180,9 +186,9 @@ export default function Home() {
       {/* Closing */}
       <section className="relative z-10 py-8 px-4 text-center">
         <div className="max-w-2xl mx-auto space-y-4">
-          <p className="text-lg text-foreground">We can&apos;t wait to celebrate with you.</p>
+          <p className="text-lg text-foreground">{copy.closing.message}</p>
           <p className="text-2xl md:text-3xl font-serif text-primary">
-            Ian & Bay
+            {copy.closing.signoff}
           </p>
         </div>
       </section>
